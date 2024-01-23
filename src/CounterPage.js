@@ -1,24 +1,13 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { Wrapper, CounterText, Button, Label, Input } from "./Components";
+import {useApi} from './hooks'
 
-const getInitialCounter = () =>
-  new Promise((res) => {
-    setTimeout(() => res(10), 1000);
-  });
 
 export const CounterPage = () => {
-  const [initialCounter, setInitialCounter] = useState(10);
   const [counter, setCounter] = useState(0);
-  const [loading, setLoading] = useState(false);
   const inputEl = useRef(null);
+  const {loading, initialCounter, setInitialCounter} = useApi();
 
-  useEffect(() => {
-    setLoading(true);
-    getInitialCounter().then((initialCounter) => {
-      setLoading(false);
-      setInitialCounter(initialCounter);
-    });
-  }, []);
 
   useEffect(() => {
     if (!loading) {
