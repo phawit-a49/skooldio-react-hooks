@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { Wrapper, CounterText, Button, Label, Input } from "./Components";
 
 const getInitialCounter = () =>
@@ -45,25 +45,16 @@ export const CounterPage = () => {
 
   console.log("re-render");
 
-  const decrement = useMemo(() => {
-    console.log("creating decrement function");
-    return () => {
+  const decrement = useCallback(() => {
       setCounter((prevCounter) => prevCounter - 1);
-    };
   }, [setCounter]);
 
-  const increment = useMemo(() => {
-    console.log("creating increment function");
-    return () => {
+  const increment = useCallback(() => {
       setCounter((prevCounter) => prevCounter + 1);
-    };
   }, [setCounter]);
 
-  const handleChange = useMemo(() => {
-    console.log("createing handle change");
-    return (e) => {
+  const handleChange = useCallback((e) => {
       setInitialCounter(e.target.value);
-    };
   }, [setInitialCounter]);
 
   if (loading) return <Wrapper>Loading...</Wrapper>;
