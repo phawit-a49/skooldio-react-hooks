@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { Wrapper, CounterText, Button, Label, Input } from "./Components";
 
 const getInitialCounter = () =>
@@ -20,11 +20,11 @@ export const CounterPage = () => {
     });
   }, []);
 
-useEffect(() => {
-  if(!loading){
-    inputEl.current.focus();
-  }
-}, [loading])
+  useEffect(() => {
+    if (!loading) {
+      inputEl.current.focus();
+    }
+  }, [loading]);
 
   useEffect(() => {
     let id;
@@ -43,26 +43,41 @@ useEffect(() => {
     };
   }, [initialCounter]);
 
-  if(loading) return <Wrapper>Loading...</Wrapper>
+  console.log("re-render");
+
+  const decrement = useMemo(() => {
+    console.log("creating decrement function");
+    return () => {
+      setCounter((prevCounter) => prevCounter - 1);
+    };
+  }, [setCounter]);
+
+  const increment = useMemo(() => {
+    console.log("creating increment function");
+    return () => {
+      setCounter((prevCounter) => prevCounter + 1);
+    };
+  }, [setCounter]);
+
+  const handleChange = useMemo(() => {
+    console.log("createing handle change");
+    return (e) => {
+      setInitialCounter(e.target.value);
+    };
+  }, [setInitialCounter]);
+
+  if (loading) return <Wrapper>Loading...</Wrapper>;
 
   return (
     <Wrapper>
       <CounterText>{counter}</CounterText>
       <div>
-        <Button onClick={() => setCounter((prevCounter) => prevCounter - 1)}>
-          -1
-        </Button>
-        <Button onClick={() => setCounter((prevCounter) => prevCounter + 1)}>
-          +1
-        </Button>
+        <Button onClick={decrement}>-1</Button>
+        <Button onClick={increment}>+1</Button>
       </div>
       <Label>
         <span>Initial Counter</span>
-        <Input
-        ref = {inputEl}
-          value={initialCounter}
-          onChange={(e) => setInitialCounter(e.target.value)}
-        />
+        <Input ref={inputEl} value={initialCounter} onChange={handleChange} />
       </Label>
     </Wrapper>
   );
