@@ -15,6 +15,8 @@ export const CounterPage = () => {
     }
   }, [loading]);
 
+  const {loading: dataLoading, data} = useApi("https://......")
+
   useEffect(() => {
     let id;
     setCounter(initialCounter);

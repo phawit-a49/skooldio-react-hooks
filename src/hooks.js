@@ -1,21 +1,16 @@
 import { useState,useEffect } from "react";
 
 
-const getInitialCounter = () =>
-  new Promise((res) => {
-    setTimeout(() => res(10), 1000);
-  });
-
-export const useApi = () => {
-    const [initialCounter, setInitialCounter] = useState(0);
+export const useApi = (url) => {
+    const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   //api
   useEffect(() => {
     setLoading(true);
-    getInitialCounter().then((initialCounter) => {
+    fetch(url).then(resp => resp.json()).then((initialCounter) => {
       setLoading(false);
-      setInitialCounter(initialCounter);
+      setData(data);
     });
   }, []);
-  return {loading, initialCounter, setInitialCounter}
+  return {loading, data}
 };
